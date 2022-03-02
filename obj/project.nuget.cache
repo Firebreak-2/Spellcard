@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "dgSpecHash": "tTXlL2ufDwbDtUQLQW8v2Li5Og7WYleSwF2Qc3uEPXVv8J5E1vPoeTDI96dyBBFZ9azP8j7G8af61Xa7OOrG7w==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Xxibr\\source\\repos\\Spellcard\\Spellcard\\Spellcard.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Xxibr\\.nuget\\packages\\discord.net\\3.3.2\\discord.net.3.3.2.nupkg.sha512",
+    "C:\\Users\\Xxibr\\.nuget\\packages\\discord.net.commands\\3.3.2\\discord.net.commands.3.3.2.nupkg.sha512",
+    "C:\\Users\\Xxibr\\.nuget\\packages\\discord.net.core\\3.3.2\\discord.net.core.3.3.2.nupkg.sha512",
+    "C:\\Users\\Xxibr\\.nuget\\packages\\discord.net.interactions\\3.3.2\\discord.net.interactions.3.3.2.nupkg.sha512",
+    "C:\\Users\\Xxibr\\.nuget\\packages\\discord.net.rest\\3.3.2\\discord.net.rest.3.3.2.nupkg.sha512",
+    "C:\\Users\\Xxibr\\.nuget\\packages\\discord.net.webhook\\3.3.2\\discord.net.webhook.3.3.2.nupkg.sha512",
+    "C:\\Users\\Xxibr\\.nuget\\packages\\discord.net.websocket\\3.3.2\\discord.net.websocket.3.3.2.nupkg.sha512",
+    "C:\\Users\\Xxibr\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\5.0.0\\microsoft.extensions.dependencyinjection.abstractions.5.0.0.nupkg.sha512",
+    "C:\\Users\\Xxibr\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
+    "C:\\Users\\Xxibr\\.nuget\\packages\\system.collections.immutable\\5.0.0\\system.collections.immutable.5.0.0.nupkg.sha512",
+    "C:\\Users\\Xxibr\\.nuget\\packages\\system.interactive.async\\5.0.0\\system.interactive.async.5.0.0.nupkg.sha512",
+    "C:\\Users\\Xxibr\\.nuget\\packages\\system.linq.async\\5.0.0\\system.linq.async.5.0.0.nupkg.sha512",
+    "C:\\Users\\Xxibr\\.nuget\\packages\\system.reactive\\5.0.0\\system.reactive.5.0.0.nupkg.sha512",
+    "C:\\Users\\Xxibr\\.nuget\\packages\\system.valuetuple\\4.5.0\\system.valuetuple.4.5.0.nupkg.sha512"
+  ],
+  "logs": []
+}

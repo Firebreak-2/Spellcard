@@ -1,4 +1,4 @@
-#Spellcard
+# Spellcard
 
 Spellcard is a Discord bot who’s goal is to provide users with easily customizable commands that can be modified at runtime.
 

@@ -15,11 +15,6 @@ public static class Program
         Client.MessageReceived += OnMessageRecieved;
         Client.JoinedGuild += OnGuildJoined;
 
-        foreach (var guild in Client.Guilds)
-        {
-            CreateGuildCommandsFile(guild);
-        }
-
         const string path = "token.txt";
         string token;
         if (File.Exists(path))
@@ -50,13 +45,17 @@ public static class Program
 
     private static void CreateGuildCommandsFile(SocketGuild guild)
     {
-        if (File.Exists($"{guild.Id}")) return;
+        var mainPath = $"{guild.Id}";
+        var prefixPath = $"{mainPath}.prefix";
         
-        File.WriteAllText($"{guild.Id}", "");
-        File.WriteAllText($"{guild.Id}.prefix", "!");
+        if (!File.Exists(mainPath))
+            File.WriteAllText(mainPath, "");
+        if (!File.Exists(prefixPath))
+            File.WriteAllText(prefixPath, "!");
     }
     private static Task OnMessageRecieved(SocketMessage message)
     {
+        CreateGuildCommandsFile(message.Channel.GetGuild());
         string prefix = File.ReadAllText($"{message.Channel.GetGuild().Id}.prefix");
         if (message.Author.IsBot) return Task.CompletedTask;
 
@@ -169,6 +168,10 @@ public static class Program
     }
     private static Task Initialize()
     {
+        foreach (var guild in Client.Guilds)
+        {
+            CreateGuildCommandsFile(guild);
+        }
         
         return Task.CompletedTask;
     }

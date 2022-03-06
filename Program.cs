@@ -50,8 +50,10 @@ public static class Program
 
     private static void CreateGuildCommandsFile(SocketGuild guild)
     {
-        if (!File.Exists($"{guild.Id}"))
-            File.WriteAllText($"{guild.Id}", "");
+        if (File.Exists($"{guild.Id}")) return;
+        
+        File.WriteAllText($"{guild.Id}", "");
+        File.WriteAllText($"{guild.Id}.prefix", "!");
     }
     private static Task OnMessageRecieved(SocketMessage message)
     {
@@ -164,7 +166,6 @@ public static class Program
     private static void ClearCommands(SocketGuild guild)
     {
         File.WriteAllText($"{guild.Id}", "");
-        File.WriteAllText($"{guild.Id}.prefix", "!");
     }
     private static Task Initialize()
     {

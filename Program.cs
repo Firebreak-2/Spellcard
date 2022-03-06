@@ -55,7 +55,7 @@ public static class Program
     }
     private static Task OnMessageRecieved(SocketMessage message)
     {
-        const string prefix = "!";
+        string prefix = File.ReadAllText($"{message.Channel.GetGuild().Id}.prefix");
         if (message.Author.IsBot) return Task.CompletedTask;
 
         if (message.Content.StartsWith($"{prefix}addcmd"))
@@ -76,37 +76,46 @@ public static class Program
             var input = message.Content.Split(' ').Where((_, i) => i != 0).ToArray()[0];
             var guild = message.Channel.GetGuild();
 
-            if (input is "addcmd" or "clrcmds" or "rmvcmd")
+            if (input is "addcmd" or "clrcmds" or "rmvcmd" or "%prefix")
                 message.Channel.SendMessageAsync("Cannot remove this command.");
             else
                 message.Channel.SendMessageAsync(RemoveCommandToFile(guild, input)
                     ? $"Removed command `{input}`."
                     : $"No command named `{input}` found.");
         }
-        else switch (message.Content)
+        else if (message.Content.StartsWith($"{prefix}%prefix"))
         {
-            case $"{prefix}clrcmds":
-                ClearCommands(message.Channel.GetGuild());
-                message.Channel.SendMessageAsync("Cleared all commands.");
-                break;
-            case $"{prefix}help":
-                message.Channel.SendMessageAsync(null, false, new EmbedBuilder()
-                    .WithTitle("All commands")
-                    .WithDescription(string.Join("\n", File.ReadAllLines($"{message.Channel.GetGuild().Id}")) + "\n" + string.Join("\n", "clrcmds:Clears all user-set commands.", "addcmd:Adds a new command. (`!addcmd example-cmd this is an example`)", "rmvcmd:Removes a specified command. (`!rmvcmd example-cmd`)"))
-                    .WithColor(Color.Blue)
-                    .Build());
-                break;
-            default:
-            {
-                if (message.Content.StartsWith(prefix) && message.Content.Length > 1)
-                {
-                    var cmdName = message.Content.Remove(0, 1);
-                    message.Channel.SendMessageAsync(GetCommandFromFile(message.Channel.GetGuild(), cmdName, out var output)
-                        ? output
-                        : $"No command named `{cmdName}` found.");
-                }
-                break;
-            }
+            var input = message.Content.Split(' ').Where((_, i) => i != 0).ToArray()[0];
+            var guild = message.Channel.GetGuild();
+            
+            File.WriteAllText($"{guild.Id}.prefix", input);
+
+            message.Channel.SendMessageAsync($"Prefix is now set to `{input}`");
+        }
+        else if (message.Content == $"{prefix}clrcmds")
+        {
+            ClearCommands(message.Channel.GetGuild());
+            message.Channel.SendMessageAsync("Cleared all commands.");
+        }
+        else if (message.Content == $"{prefix}help")
+        {
+            message.Channel.SendMessageAsync(null, false, new EmbedBuilder()
+                .WithTitle("All commands")
+                .WithDescription(string.Join("\n", File.ReadAllLines($"{message.Channel.GetGuild().Id}")) + "\n" +
+                                 string.Join("\n", "clrcmds:Clears all user-set commands.",
+                                     "addcmd:Adds a new command. (`!addcmd example-cmd this is an example`)",
+                                     "rmvcmd:Removes a specified command. (`!rmvcmd example-cmd`)"))
+                .WithColor(Color.Blue)
+                .Build());
+        }
+        else
+        {
+            if (!message.Content.StartsWith(prefix) || message.Content.Length <= 1) return Task.CompletedTask;
+            
+            var cmdName = message.Content.Remove(0, 1);
+            message.Channel.SendMessageAsync(GetCommandFromFile(message.Channel.GetGuild(), cmdName, out var output)
+                ? output
+                : $"No command named `{cmdName}` found.");
         }
         
         return Task.CompletedTask;
@@ -119,7 +128,7 @@ public static class Program
         var lines = File.ReadAllText($"{guild.Id}");
         var lines2 = lines.Split('\n');
         
-        if (lines2.Any(x => x.Split(':')[0] is "addcmd" or "clrcmds" or "rmvcmd" || x.Split(':')[0] == command)) return false;
+        if (lines2.Any(x => x.Split(':')[0] is "addcmd" or "clrcmds" or "rmvcmd" or "%prefix" || x.Split(':')[0] == command)) return false;
         
         File.WriteAllText($"{guild.Id}", lines + $"\n{command}:{output.Replace("\n", "\\n")}");
         return true;
@@ -154,7 +163,8 @@ public static class Program
     }
     private static void ClearCommands(SocketGuild guild)
     {
-        File.WriteAllText(guild.Id.ToString(), "");
+        File.WriteAllText($"{guild.Id}", "");
+        File.WriteAllText($"{guild.Id}.prefix", "!");
     }
     private static Task Initialize()
     {
